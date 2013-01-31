@@ -1,7 +1,7 @@
 Chicago Boss: Start small, dream big
 ====================================
 
-Test Chicago Boss is a server framework inspired by Rails and written in Erlang. It
+Chicago Boss is a server framework inspired by Rails and written in Erlang. It
 offers all the conveniences of modern web development, including Comet. What sets
 Chicago Boss apart from other non-Erlang frameworks is that it can handle large
 amounts of traffic without any drop in performance. What sets Chicago Boss apart
