@@ -20,6 +20,7 @@ stop(_) ->
 
 init(_) ->
     error_logger:info_msg("Starting distributed session mnesia storage~n"),	
+    mnesia:create_schema([node()]),
     mnesia:start(),
     %%Checks for table, after some time tries to recreate it
     case mnesia:wait_for_tables([?TABLE], ?TIMEOUT) of
@@ -84,7 +85,7 @@ delete_session_value(_, Sid, Key) ->
 create_session_storage()->
     Nodes = mnesia_nodes(),
     error_logger:info_msg("Creating mnesia table for nodes ~p~n",  [Nodes]),
-    case mnesia:create_table(?TABLE,[{disc_copies,  Nodes}, {attributes, record_info(fields, boss_session)}]) of
+    case mnesia:create_table(?TABLE,[{ram_copies,  Nodes}, {attributes, record_info(fields, boss_session)}]) of
         {aborted, Reason} -> error_logger:error_msg("Error creating mnesia table for sessions: ~p~n", [Reason]);
         {atomic, ok} -> ok
     end.
@@ -97,7 +98,4 @@ recover_data(Sid)->
     end.
 
 mnesia_nodes()->
-    case application:get_env(session_mnesia_nodes) of
-        {ok, Val} -> Val;
-        _ -> [node()]
-    end.
+    [node()|nodes()].
