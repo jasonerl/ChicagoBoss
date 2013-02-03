@@ -94,9 +94,8 @@ init(Config) ->
     if 
         MasterNode =:= ThisNode ->
             error_logger:info_msg("Starting master services on ~p~n", [MasterNode]),
-            boss_mq:start(),
-
-            boss_news:start(),
+%            boss_mq:start(),
+%            boss_news:start(),
 
             case boss_env:get_env(smtp_server_enable, false) of
                 true ->
@@ -106,7 +105,7 @@ init(Config) ->
                         {port, boss_env:get_env(smtp_server_port, 25)},
                         {protocol, boss_env:get_env(smtp_server_protocol, tcp)},
                         {sessionoptions, [{boss_env, Env}]}],
-                    gen_smtp_server:start({global, boss_smtp_server}, boss_smtp_server, [Options]);
+                    gen_smtp_server:start({local, boss_smtp_server}, boss_smtp_server, [Options]);
                 _ ->
                     ok
             end;
