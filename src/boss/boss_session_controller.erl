@@ -18,7 +18,8 @@ start_link(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 init(Options) ->
-    Adapter = proplists:get_value(adapter, Options, boss_session_adapter_mock),
+    SessionDriver = boss_env:get_env(session_adapter, mnesia),
+    Adapter = list_to_atom(lists:concat(["boss_session_adapter_", SessionDriver])),
     {A1, A2, A3} = now(),
     random:seed(A1,A2,A3),
     {ok, Conn} = Adapter:start(Options),
