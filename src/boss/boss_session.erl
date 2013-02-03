@@ -16,7 +16,7 @@ start() ->
                     _ -> Acc
                 end
         end, [], [session_key, session_exp_time]),
-    SessionDriver = boss_env:get_env(session_adapter, mock),
+    SessionDriver = boss_env:get_env(session_adapter, mnesia),
     Adapter = list_to_atom(lists:concat(["boss_session_adapter_", SessionDriver])),
     Adapter:init([]),
     SessionOptions1 = [{adapter, Adapter}|SessionOptions],
